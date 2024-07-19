@@ -70,4 +70,8 @@ public class ScheduleEntity implements Serializable {
 	@Setter
 	@Column(name = "CANCEL_JUSTIFICATION")
 	private String justification;
+	
+	@Setter
+	@Column(name = "PATIENT_ID")
+	private Long patientId;
 }

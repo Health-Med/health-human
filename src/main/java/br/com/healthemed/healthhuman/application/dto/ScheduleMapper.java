@@ -15,10 +15,10 @@ public class ScheduleMapper {
 	}
 
 	public ScheduleDto toScheduleDto(ScheduleEntity schedule) {
-		return new ScheduleDto(schedule.getId(), schedule.getDoctorId(), schedule.getCreatedTime(), schedule.getUpdatedTime(), schedule.getSchedule(), schedule.getStatus(), schedule.getJustification());
+		return new ScheduleDto(schedule.getId(), schedule.getDoctorId(), schedule.getCreatedTime(), schedule.getUpdatedTime(), schedule.getSchedule(), schedule.getStatus(), schedule.getJustification(), schedule.getPatientId());
 	}
 	
 	public ScheduleEntity toScheduleEntity(ScheduleDto dto) {
-		return new ScheduleEntity(dto.getId(), dto.getDoctorId(), dto.getCreationDateTime(), dto.getUpdateDateTime(), dto.getSchedule(), dto.getStatus(), dto.getJustification());
+		return new ScheduleEntity(dto.getId(), dto.getDoctorId(), dto.getCreationDateTime(), dto.getUpdateDateTime(), dto.getSchedule(), dto.getStatus(), dto.getJustification(), dto.getPatientId());
 	}
 }

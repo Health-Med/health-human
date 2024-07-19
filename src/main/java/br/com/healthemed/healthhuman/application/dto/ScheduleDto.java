@@ -46,4 +46,6 @@ public class ScheduleDto {
 	private ScheduleStatus status;
 	
 	private String justification;
+	
+	private Long patientId;
 }

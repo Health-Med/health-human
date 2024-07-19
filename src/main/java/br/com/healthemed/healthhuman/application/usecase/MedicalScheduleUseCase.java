@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import br.com.healthemed.healthhuman.application.dto.CheckoutScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
@@ -91,6 +92,21 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 			throw new RuntimeException("Necessário um status conhecido");
 		}
 
+		return medicalAdapter.save(schedule);
+	}
+
+	@Override
+	public ScheduleEntity checkout(Long patientId, CheckoutScheduleRequest request) {
+		var schedule = medicalAdapter.getById(request.getScheduleId())
+				.orElseThrow(() -> new RuntimeException("Agenda não encontrada"));
+		
+		if (!schedule.getStatus().equals(ScheduleStatus.OPENED)) {
+			throw new RuntimeException("Só é possível confirmar uma agenda que esteja aberta.");
+		}
+		
+		schedule.setStatus(ScheduleStatus.SCHEDULED);
+		schedule.setJustification(null);
+		schedule.setPatientId(request.getPatientId());
 		return medicalAdapter.save(schedule);
 	}
 
