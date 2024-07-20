@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.healthemed.healthhuman.application.dto.CreateDoctorRequest;
 import br.com.healthemed.healthhuman.application.dto.DoctorDto;
 import br.com.healthemed.healthhuman.application.dto.DoctorMapper;
+import br.com.healthemed.healthhuman.application.dto.ResponseQueryPage;
 import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
 import br.com.healthemed.healthhuman.infra.database.entity.DoctorEntity;
 import lombok.RequiredArgsConstructor;
@@ -29,38 +30,47 @@ public class DoctorController {
 	private final IDoctorEntityAdapter doctorAdapter;
 
 	@GetMapping
-	public List<DoctorDto> getAll(
+	public ResponseQueryPage getAll(
 			@RequestParam(required = true, defaultValue = "0") Integer page,
 			@RequestParam(required = true, defaultValue = "10") Integer size,
 			@RequestParam(required = false) String speciality,
 			@RequestParam(required = false) Integer rating,
-			@RequestParam(required = false) Integer distance,
+			@RequestParam(required = false) Integer maxDistance,
 			@RequestParam(required = false) Double latitude,
 			@RequestParam(required = false) Double longitude) {
 		
 		if (speciality != null) {
-			return doctorAdapter.findAllBySpeciality(page, size, speciality).stream()
-					.map(mapper::toDto)
-					.toList();
+			var pageFound = doctorAdapter.findAllBySpeciality(page, size, speciality);
+					
+			List<DoctorDto> lista = pageFound.stream().map(mapper::toDto).toList();
+			return new ResponseQueryPage(lista, page, pageFound.getTotalPages(), pageFound.getTotalElements());
 		}
 		
 		if (rating != null) {
-			return doctorAdapter.findAllByRating(page, size, rating).map(mapper::toDto).toList();
+			var pageFound = doctorAdapter.findAllByRating(page, size, rating);
+			return new ResponseQueryPage(pageFound.map(mapper::toDto).toList(), page, 
+					pageFound.getTotalPages(), pageFound.getTotalElements());
 		}
 		
-		if (distance != null && latitude != null && longitude != null) {
-			return doctorAdapter.findAll(page, size).stream()
+		if (maxDistance != null && latitude != null && longitude != null) {
+			var pageFound = doctorAdapter.findAll(page, size);
+			var lista = pageFound.stream()
 					.map(entity -> {
 						var distanceInKm = calculateDistanceInKm(latitude, longitude, entity.getLatitude(), entity.getLongitude());
 						var dto = mapper.toDto(entity);
 						dto.setDistanceInKm(roundFor2Cases(distanceInKm));
 						return dto;
 					})
-					.filter(dto -> dto.getDistanceInKm() <= distance)
+					.filter(dto -> dto.getDistanceInKm() <= maxDistance)
+					.sorted((d1, d2) -> d1.getDistanceInKm().compareTo(d2.getDistanceInKm()))
 					.toList();
+			// FIXME: tentar corrigir quantidade total de páginas
+			return new ResponseQueryPage(lista, page, page, lista.size());
 		}
 		
-		return doctorAdapter.findAll(page, size).map(mapper::toDto).toList();
+		var pageFound = doctorAdapter.findAll(page, size);
+		return new ResponseQueryPage(pageFound.map(mapper::toDto).toList(), page, 
+				pageFound.getTotalPages(), pageFound.getTotalElements());
 	}
 	
 	private Double roundFor2Cases(Double distance) {

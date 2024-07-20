@@ -73,11 +73,11 @@ public class DoctorEntity implements Serializable {
 	private Integer rating;
 	
 	@Setter
-	@Column
+	@Column(name = "LATITUDE")
 	private double latitude;
 	
 	@Setter
-	@Column
+	@Column(name = "LONGITUDE")
 	private double longitude;
 
 	public String getFullAddress() {

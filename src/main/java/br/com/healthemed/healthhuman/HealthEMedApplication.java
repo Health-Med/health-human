@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = { "br.com.healthemed.healthhuman" })
 @EnableFeignClients
-@EnableCaching
+//@EnableCaching
 public class HealthEMedApplication {
 	
 	public static void main(String[] args) {
