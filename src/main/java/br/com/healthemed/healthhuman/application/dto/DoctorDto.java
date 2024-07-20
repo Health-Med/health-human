@@ -36,4 +36,10 @@ public class DoctorDto {
 	private String complement;
 	
 	private Integer rating;
+	
+	private Double latitude;
+	
+	private Double longitude;
+	
+	private Double distanceInKm;
 }

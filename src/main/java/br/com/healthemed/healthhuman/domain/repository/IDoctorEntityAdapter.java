@@ -10,8 +10,6 @@ public interface IDoctorEntityAdapter {
 	
 	Page<DoctorEntity> findAllBySpeciality(int page, int size, String speciality);
 	
-	Page<DoctorEntity> findAllByDistance(int page, int size, Long latTarget, Long longTarget);
-	
 	Page<DoctorEntity> findAllByRating(int page, int size, Integer rating);
 
 	DoctorEntity create(DoctorEntity newDoctor);

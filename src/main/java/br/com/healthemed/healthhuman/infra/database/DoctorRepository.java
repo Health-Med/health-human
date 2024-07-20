@@ -3,6 +3,7 @@ package br.com.healthemed.healthhuman.infra.database;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.healthemed.healthhuman.infra.database.entity.DoctorEntity;
@@ -12,7 +13,10 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, String>{
 
 	Page<DoctorEntity> findAll(Pageable pageable);
 	
-	Page<DoctorEntity> findAllBySpecialityContainingIgnoreCase(String speciality, Pageable pageable);
+	@Query(value = "SELECT * FROM TB_DOCTOR WHERE UPPER(SPECIALITY) LIKE ?1",
+			countQuery = "SELECT count(*) FROM TB_DOCTOR WHERE UPPER(SPECIALITY) LIKE ?1",
+			nativeQuery = true)
+	Page<DoctorEntity> findBySpecialityContaining(String speciality, Pageable pageable);
 	
 	Page<DoctorEntity> findAllByRating(Integer rating, Pageable pageable);
 }

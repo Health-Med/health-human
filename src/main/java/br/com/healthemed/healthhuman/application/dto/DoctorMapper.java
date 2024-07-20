@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 public class DoctorMapper {
 
 	public DoctorDto toDto(DoctorEntity entity) {
-		return new DoctorDto(entity.getId(), entity.getName(), entity.getSpeciality(), entity.getZipCode(), entity.getAddress(), entity.getComplement(), entity.getRating());
+		return new DoctorDto(entity.getId(), entity.getName(), entity.getSpeciality(), entity.getZipCode(),
+				entity.getAddress(), entity.getComplement(), entity.getRating(), entity.getLatitude(),
+				entity.getLongitude(), null);
 	}
 }

@@ -71,4 +71,16 @@ public class DoctorEntity implements Serializable {
 	@NotNull
 	@Column(name = "RATING")
 	private Integer rating;
+	
+	@Setter
+	@Column
+	private double latitude;
+	
+	@Setter
+	@Column
+	private double longitude;
+
+	public String getFullAddress() {
+		return String.format("%s, %s", address, number);
+	}
 }
