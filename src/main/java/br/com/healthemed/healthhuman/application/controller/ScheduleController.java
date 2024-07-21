@@ -16,6 +16,7 @@ import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.ScheduleDto;
 import br.com.healthemed.healthhuman.application.dto.ScheduleMapper;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
+import br.com.healthemed.healthhuman.domain.exception.ScheduleNotFoundException;
 import br.com.healthemed.healthhuman.domain.repository.IScheduleEntityAdapter;
 import br.com.healthemed.healthhuman.domain.usecase.IMedicalScheduleUseCase;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/schedule")
 @RequiredArgsConstructor
-public class DoctorScheduleController {
+public class ScheduleController {
 	
 	private final ScheduleMapper scheduleMapper;
 	
@@ -59,7 +60,7 @@ public class DoctorScheduleController {
 				.withMinute(59);
 		return Optional.ofNullable(scheduleEntityAdapter.getByDoctorAndDateTimeBetween(doctorId, start, end))
 				.map(scheduleMapper::toScheduleDto)
-				.orElseThrow(() -> new RuntimeException("Probleminha")); // FIXME: criar exceção própria
+				.orElseThrow(ScheduleNotFoundException::new);
 	}
 	
 	@PostMapping("/{doctorId}")
@@ -72,6 +73,6 @@ public class DoctorScheduleController {
 	public ScheduleDto updateSchedule(@PathVariable String doctorId, @RequestBody UpdateDoctorScheduleRequest request) {
 		return Optional.ofNullable(medicalScheduleUseCase.updateDoctorSchedule(doctorId, request))
 				.map(scheduleMapper::toScheduleDto)
-				.orElseThrow(() -> new RuntimeException("Probleminha")); // FIXME: criar exceção própria
+				.orElseThrow(ScheduleNotFoundException::new);
 	}
 }

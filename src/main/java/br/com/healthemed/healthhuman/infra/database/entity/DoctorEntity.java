@@ -69,6 +69,21 @@ public class DoctorEntity implements Serializable {
 	
 	@NonNull
 	@NotNull
+	@Column(name = "ADDRESS_CITY")
+	private String city;
+	
+	@NonNull
+	@NotNull
+	@Column(name = "ADDRESS_STATE")
+	private String state;
+	
+	@NonNull
+	@NotNull
+	@Column(name = "ADDRESS_COUNTRY")
+	private String country;
+	
+	@NonNull
+	@NotNull
 	@Column(name = "RATING")
 	private Integer rating;
 	
@@ -79,8 +94,12 @@ public class DoctorEntity implements Serializable {
 	@Setter
 	@Column(name = "LONGITUDE")
 	private double longitude;
+	
+	public String getSearchableAddress() {
+		return String.format("%s, %s %s %s %s", address, number, city, state, country);
+	}
 
 	public String getFullAddress() {
-		return String.format("%s, %s", address, number);
+		return String.format("%s, %s - %s, %s, %s", address, number, city, state, country);
 	}
 }

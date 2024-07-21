@@ -47,5 +47,17 @@ public class CreateDoctorRequest implements Serializable {
 	
 	@NonNull
 	@NotNull
+	public String city;
+	
+	@NonNull
+	@NotNull
+	public String state;
+	
+	@NonNull
+	@NotNull
+	public String country;
+	
+	@NonNull
+	@NotNull
 	public Integer rating;
 }

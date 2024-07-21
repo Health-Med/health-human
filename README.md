@@ -11,3 +11,10 @@ Instalação
 
 Desinstalação
 - Rodar localmente o comando `make down`
+
+
+--- 
+##### TODO:
+- valor da consulta
+- documentação OpenApi
+- pacienteId como UUID

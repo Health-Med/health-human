@@ -97,7 +97,7 @@ public class DoctorController {
 	@PostMapping
 	public DoctorDto create(@RequestBody CreateDoctorRequest request) {
 		var newDoctor = new DoctorEntity(request.getName(), request.getSpeciality(), request.getZipCode(),
-				request.getAddress(), request.getNumber(), request.getComplement(), request.getRating());
+				request.getAddress(), request.getNumber(), request.getComplement(), request.getCity(), request.getState(), request.getCountry(), request.getRating());
 		return Optional.ofNullable(doctorAdapter.create(newDoctor))
 				.map(mapper::toDto)
 				.orElseThrow(() -> new RuntimeException("Ocorreu uma falha xpto"));

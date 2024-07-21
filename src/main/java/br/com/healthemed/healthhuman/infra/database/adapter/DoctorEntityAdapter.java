@@ -28,8 +28,8 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 
 	@Override
 	public DoctorEntity create(DoctorEntity newDoctor) {
-		String query = newDoctor.getFullAddress();
-		var location = nominatimRestClient.getLocation(query).stream().findFirst()
+		String addressQuery = newDoctor.getSearchableAddress();
+		var location = nominatimRestClient.getLocation(addressQuery).stream().findFirst()
 				.orElseThrow(() -> new RuntimeException("Impossível consultar endereço"));
 		newDoctor.setLatitude(location.getLat());
 		newDoctor.setLongitude(location.getLon());
