@@ -18,7 +18,7 @@ FROM amazoncorretto:17-al2-jdk
 WORKDIR /app
 
 # Copie o JAR gerado a partir da etapa anterior para o contêiner
-COPY --from=builder /app/target/bluesburguer-order-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/health-human-0.0.1-SNAPSHOT.jar .
 COPY --from=builder /app/target/*.properties .
 
 
@@ -26,4 +26,4 @@ COPY --from=builder /app/target/*.properties .
 EXPOSE 8000
 
 # Comando para iniciar o aplicativo
-ENTRYPOINT ["java", "-jar", "bluesburguer-order-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "health-human-0.0.1-SNAPSHOT.jar"]
