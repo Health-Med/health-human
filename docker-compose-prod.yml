@@ -29,15 +29,15 @@ services:
     networks:
       - healthhuman-network
     environment:
-      - SPRING_PROFILES_ACTIVE=test
+      - SPRING_PROFILES_ACTIVE=production
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}
       - AWS_REGION=us-east-1
-      - MYSQL_DATABASE=dbhealthmed
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - MYSQL_USER=healthhumanapp
-      - MYSQL_PASSWORD=8lY|BSk-0DE7
+      - SPRING_DATASOURCE_PASSWORD=8lY|BSk-0DE7
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/dbhealthmed?useTimezone=true&serverTimezone=UTC?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=healthhumanapp
+      - SPRING_JPA_GENERATE_DDL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     volumes:
       - db_app:/var/lib/app
     healthcheck:
