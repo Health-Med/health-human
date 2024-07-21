@@ -7,7 +7,7 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_DATABASE=health-human
+      - MYSQL_DATABASE=dbhealthmed
       - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
       - MYSQL_USER=healthhumanapp
       - MYSQL_PASSWORD=8lY|BSk-0DE7
@@ -33,7 +33,7 @@ services:
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}
       - AWS_REGION=us-east-1
-      - MYSQL_DATABASE=health-human
+      - MYSQL_DATABASE=dbhealthmed
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_USER=healthhumanapp
