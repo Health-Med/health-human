@@ -1,6 +1,7 @@
 package br.com.healthemed.healthhuman.application.usecase;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import br.com.healthemed.healthhuman.application.dto.CheckoutScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
+import br.com.healthemed.healthhuman.domain.exception.ScheduleException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleNotFoundException;
 import br.com.healthemed.healthhuman.domain.usecase.IMedicalScheduleUseCase;
 import br.com.healthemed.healthhuman.infra.database.adapter.ScheduleEntityAdapter;
@@ -23,7 +25,7 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 	@Override
 	public ScheduleEntity openDoctorSchedule(String doctorId, OpenDoctorScheduleRequest request) {
 		if (medicalAdapter.getByDoctorAndDateTime(doctorId, request.getDateTime()) != null) {
-			throw new ScheduleNotFoundException("A agenda já se encontra aberta para esta data/hora.");
+			throw new ScheduleException("A agenda já se encontra fechada para esta data/hora.");
 		}
 
 		return medicalAdapter.save(doctorId, request.getDateTime(), ScheduleStatus.OPENED);
@@ -96,17 +98,17 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 	}
 
 	@Override
-	public ScheduleEntity checkout(Long patientId, CheckoutScheduleRequest request) {
+	public ScheduleEntity checkout(UUID patientId, CheckoutScheduleRequest request) {
 		var schedule = medicalAdapter.getById(request.getScheduleId())
 				.orElseThrow(() -> new ScheduleNotFoundException("Agenda não encontrada"));
 		
 		if (!schedule.getStatus().equals(ScheduleStatus.OPENED)) {
-			throw new ScheduleNotFoundException("Só é possível confirmar uma agenda que esteja aberta.");
+			throw new ScheduleException("impossível confirmar agenda que não está aberta.");
 		}
 		
 		schedule.setStatus(ScheduleStatus.SCHEDULED);
 		schedule.setJustification(null);
-		schedule.setPatientId(request.getPatientId());
+		schedule.setPatientId(patientId);
 		return medicalAdapter.save(schedule);
 	}
 

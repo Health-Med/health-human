@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import br.com.healthemed.healthhuman.domain.exception.LocationException;
 import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
 import br.com.healthemed.healthhuman.infra.adapter.NominatimRestClient;
 import br.com.healthemed.healthhuman.infra.database.DoctorRepository;
@@ -30,7 +31,7 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 	public DoctorEntity create(DoctorEntity newDoctor) {
 		String addressQuery = newDoctor.getSearchableAddress();
 		var location = nominatimRestClient.getLocation(addressQuery).stream().findFirst()
-				.orElseThrow(() -> new RuntimeException("Impossível consultar endereço"));
+				.orElseThrow(LocationException::new);
 		newDoctor.setLatitude(location.getLat());
 		newDoctor.setLongitude(location.getLon());
 		var saved = repository.save(newDoctor);

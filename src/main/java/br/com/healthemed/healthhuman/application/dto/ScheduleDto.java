@@ -1,6 +1,7 @@
 package br.com.healthemed.healthhuman.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -47,5 +48,5 @@ public class ScheduleDto {
 	
 	private String justification;
 	
-	private Long patientId;
+	private UUID patientId;
 }

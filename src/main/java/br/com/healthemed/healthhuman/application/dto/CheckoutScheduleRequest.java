@@ -4,20 +4,26 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CheckoutScheduleRequest implements Serializable {
 	
 	private static final long serialVersionUID = -621830335594903665L;
 	
+	@NonNull
+	@NotNull
 	private Long scheduleId;
 	
-	private Long patientId;
+	@NonNull
+	@NotNull
+	private String patientId;
 }
