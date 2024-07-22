@@ -15,6 +15,4 @@ Desinstalação
 
 --- 
 ##### TODO:
-- valor da consulta
 - documentação OpenApi
-- pacienteId como UUID

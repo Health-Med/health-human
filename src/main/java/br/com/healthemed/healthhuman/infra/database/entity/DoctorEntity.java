@@ -87,6 +87,11 @@ public class DoctorEntity implements Serializable {
 	@Column(name = "RATING")
 	private Integer rating;
 	
+	@NonNull
+	@NotNull
+	@Column(name = "PRICE")
+	private Double price;
+	
 	@Setter
 	@Column(name = "LATITUDE")
 	private double latitude;

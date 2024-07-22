@@ -42,7 +42,7 @@ public class NominatimFakeClient implements NominatimRestClient {
 	}
 
 	@Override
-	public List<Location> getLocation(String query) {
+	public List<Location> searchLocation(String query) {
 		try {
 			var key = findKey(query);
 			var json = ADDRESSES.get(key);

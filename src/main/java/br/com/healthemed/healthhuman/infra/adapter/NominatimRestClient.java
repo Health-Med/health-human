@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface NominatimRestClient {
 
 	@GetMapping(value = "/search?format=json&q={query}")
-	List<Location> getLocation(@PathVariable("query") String query);
+	List<Location> searchLocation(@PathVariable("query") String query);
 }

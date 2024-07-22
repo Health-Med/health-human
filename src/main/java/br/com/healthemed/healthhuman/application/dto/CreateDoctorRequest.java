@@ -60,4 +60,6 @@ public class CreateDoctorRequest implements Serializable {
 	@NonNull
 	@NotNull
 	public Integer rating;
+	
+	public Double price;
 }

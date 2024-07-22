@@ -30,7 +30,7 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 	@Override
 	public DoctorEntity create(DoctorEntity newDoctor) {
 		String addressQuery = newDoctor.getSearchableAddress();
-		var location = nominatimRestClient.getLocation(addressQuery).stream().findFirst()
+		var location = nominatimRestClient.searchLocation(addressQuery).stream().findFirst()
 				.orElseThrow(LocationException::new);
 		newDoctor.setLatitude(location.getLat());
 		newDoctor.setLongitude(location.getLon());

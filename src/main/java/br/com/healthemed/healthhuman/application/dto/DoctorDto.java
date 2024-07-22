@@ -37,9 +37,11 @@ public class DoctorDto {
 	
 	private Integer rating;
 	
+	private Double price;
+	
 	private Double latitude;
 	
-	private Double longitude;
+	private Double longitude;	
 	
 	private Double distanceInKm;
 }
