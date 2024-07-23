@@ -7,10 +7,16 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_DATABASE=health-human
+      - MYSQL_DATABASE=dbhealthmed
       - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
       - MYSQL_USER=healthhumanapp
       - MYSQL_PASSWORD=8lY|BSk-0DE7
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 40s
+      timeout: 20s
+      retries: 10
+      start_period: 120s
     ports:
       - '3306:3306'
     networks:
@@ -25,15 +31,18 @@ services:
     image: healthhuman:latest
     container_name: healthhuman
     ports:
-      - "30000:8000"
+      - "30000:8080"
     networks:
       - healthhuman-network
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=test
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}
       - AWS_REGION=us-east-1
-      - MYSQL_DATABASE=health-human
+      - MYSQL_DATABASE=dbhealthmed
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_USER=healthhumanapp
@@ -41,7 +50,7 @@ services:
     volumes:
       - db_app:/var/lib/app
     healthcheck:
-      test: "curl --fail --silent localhost:8000/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
       interval: 1m
       timeout: 3s
       retries: 3
