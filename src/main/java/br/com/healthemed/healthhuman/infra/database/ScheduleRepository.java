@@ -17,6 +17,9 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long> 
 	
 	List<ScheduleEntity> findAllByDoctorId(String doctorId);
 	
+	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE PATIENT_ID = ?1", nativeQuery = true)
+	List<ScheduleEntity> findAllByPatientId(String patientId);
+	
 	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND DATE(SCHEDULE_DATE) = ?2", nativeQuery = true)
 	List<ScheduleEntity> findAllByDoctorIdAndDate(String doctorId, LocalDate date);
 	

@@ -15,7 +15,12 @@ import br.com.healthemed.healthhuman.application.dto.DoctorDto;
 import br.com.healthemed.healthhuman.application.dto.DoctorMapper;
 import br.com.healthemed.healthhuman.application.dto.ResponseQueryPage;
 import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
-import br.com.healthemed.healthhuman.infra.database.entity.DoctorEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,14 +34,33 @@ public class DoctorController {
 
 	private final IDoctorEntityAdapter doctorAdapter;
 
+	@ApiResponses(value = { 
+	  @ApiResponse(responseCode = "200", description = "Open doctor schedule, on datetime", 
+	    content = { @Content(mediaType = "application/json", 
+	      schema = @Schema(allOf = ResponseQueryPage.class)) })
+	})
 	@GetMapping
+	@Operation(summary = "Query dos doutores")
 	public ResponseQueryPage getAll(
+			@Parameter(description = "Página a ser buscada", example = "1")
 			@RequestParam(required = true, defaultValue = "0") Integer page,
+			
+			@Parameter(description = "Quantidade de itens por página", example = "5")
 			@RequestParam(required = true, defaultValue = "10") Integer size,
+			
+			@Parameter(description = "Especialidade do médico", example = "car")
 			@RequestParam(required = false) String speciality,
+			
+			@Parameter(description = "Nota do médico", example = "5")
 			@RequestParam(required = false) Integer rating,
+			
+			@Parameter(description = "Distancia máxima, em km", example = "30")
 			@RequestParam(required = false) Integer maxDistance,
+			
+			@Parameter(description = "Latitude", example = "-23.4962111")
 			@RequestParam(required = false) Double latitude,
+			
+			@Parameter(description = "Longitude", example = "-46.8701695")
 			@RequestParam(required = false) Double longitude) {
 		
 		if (speciality != null) {
@@ -95,10 +119,9 @@ public class DoctorController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Criação de doutor")
 	public DoctorDto create(@RequestBody CreateDoctorRequest request) {
-		var newDoctor = new DoctorEntity(request.getName(), request.getSpeciality(), request.getZipCode(),
-				request.getAddress(), request.getNumber(), request.getComplement(), request.getCity(), request.getState(), request.getCountry(), request.getRating(), request.getPrice());
-		return Optional.ofNullable(doctorAdapter.create(newDoctor))
+		return Optional.ofNullable(doctorAdapter.create(request))
 				.map(mapper::toDto)
 				.orElseThrow(() -> new RuntimeException("Ocorreu uma falha xpto"));
 	}

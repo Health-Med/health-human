@@ -5,13 +5,18 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import br.com.healthemed.healthhuman.application.dto.AllowOrRejectDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.CheckoutScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
+import br.com.healthemed.healthhuman.domain.exception.DoctorNotFoundException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleNotFoundException;
+import br.com.healthemed.healthhuman.domain.exception.StatusNotFoundException;
 import br.com.healthemed.healthhuman.domain.usecase.IMedicalScheduleUseCase;
+import br.com.healthemed.healthhuman.infra.database.DoctorRepository;
+import br.com.healthemed.healthhuman.infra.database.ScheduleRepository;
 import br.com.healthemed.healthhuman.infra.database.adapter.ScheduleEntityAdapter;
 import br.com.healthemed.healthhuman.infra.database.entity.ScheduleEntity;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +25,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 
-	private final ScheduleEntityAdapter medicalAdapter;
+	private final ScheduleEntityAdapter scheduleAdapter;
+	
+	private final ScheduleRepository scheduleRepository;
+	
+	private final DoctorRepository doctorRepository;
 
 	@Override
 	public ScheduleEntity openDoctorSchedule(String doctorId, OpenDoctorScheduleRequest request) {
-		if (medicalAdapter.getByDoctorAndDateTime(doctorId, request.getDateTime()) != null) {
+		
+		var doctor = doctorRepository.findById(doctorId).orElseThrow(DoctorNotFoundException::new);
+		
+		if (scheduleAdapter.getByDoctorAndDateTime(doctor.getId(), request.getDateTime()) != null) {
 			throw new ScheduleException("A agenda já se encontra fechada para esta data/hora.");
 		}
 
-		return medicalAdapter.save(doctorId, request.getDateTime(), ScheduleStatus.OPENED);
+		return scheduleAdapter.save(doctorId, request.getDateTime(), ScheduleStatus.OPENED);
 	}
 
 	@Override
 	public ScheduleEntity updateDoctorSchedule(String doctorId, UpdateDoctorScheduleRequest request) {
-		var schedule = medicalAdapter.getById(request.getId())
+		var doctor = doctorRepository.findById(doctorId).orElseThrow(DoctorNotFoundException::new);
+		
+		var schedule = scheduleAdapter.getById(request.getId())
 				.orElseThrow(() -> new ScheduleNotFoundException("Agenda não encontrada"));
-		if (!schedule.getDoctorId().equalsIgnoreCase(doctorId)) {
+		if (!schedule.getDoctorId().equalsIgnoreCase(doctor.getId())) {
 			throw new ScheduleNotFoundException("Alteração não permitida");
 		}
 
@@ -53,7 +67,6 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 				schedule.setJustification(Optional.ofNullable(request.getJustification())
 						.orElseThrow(() -> new ScheduleNotFoundException("Justificativa necessária para rejeitar consulta")));
 				break;
-			// TODO: PatientScheduleUseCase deverá implementar cancelamento de consulta do paciente
 			default:
 				throw new ScheduleNotFoundException("Outros status são desconhedidos na atualização da consulta.");
 			}
@@ -91,15 +104,15 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 			}
 			break;
 		default:
-			throw new ScheduleNotFoundException("Necessário um status conhecido");
+			throw new StatusNotFoundException();
 		}
 
-		return medicalAdapter.save(schedule);
+		return scheduleAdapter.save(schedule);
 	}
 
 	@Override
 	public ScheduleEntity checkout(UUID patientId, CheckoutScheduleRequest request) {
-		var schedule = medicalAdapter.getById(request.getScheduleId())
+		var schedule = scheduleAdapter.getById(request.getScheduleId())
 				.orElseThrow(() -> new ScheduleNotFoundException("Agenda não encontrada"));
 		
 		if (!schedule.getStatus().equals(ScheduleStatus.OPENED)) {
@@ -108,8 +121,29 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 		
 		schedule.setStatus(ScheduleStatus.SCHEDULED);
 		schedule.setJustification(null);
-		schedule.setPatientId(patientId);
-		return medicalAdapter.save(schedule);
+		schedule.setPatientId(patientId.toString());
+		return scheduleAdapter.save(schedule);
+	}
+	
+	@Override
+	public ScheduleEntity updatePatientSchedule(String patientId, AllowOrRejectDoctorScheduleRequest request) {
+		var schedule = scheduleRepository.findAllByPatientId(patientId).stream().findFirst()
+			.orElseThrow(ScheduleNotFoundException::new);
+		
+		switch(request.getStatus()) {
+		case ACCEPTED:
+			schedule.setStatus(request.getStatus());
+			schedule.setJustification(null);			
+			break;
+		case REJECTED:
+			schedule.setStatus(request.getStatus());
+			schedule.setJustification(Optional.ofNullable(request.getJustification())
+					.orElseThrow(() -> new ScheduleException("Justificativa necessária para rejeitar uma agenda")));
+			break;
+		default:
+			throw new StatusNotFoundException();
+		}
+		return scheduleRepository.save(schedule);
 	}
 
 }

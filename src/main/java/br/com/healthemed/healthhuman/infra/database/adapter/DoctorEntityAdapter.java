@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import br.com.healthemed.healthhuman.application.dto.CreateDoctorRequest;
 import br.com.healthemed.healthhuman.domain.exception.LocationException;
 import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
 import br.com.healthemed.healthhuman.infra.adapter.NominatimRestClient;
@@ -28,7 +29,9 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 	}
 
 	@Override
-	public DoctorEntity create(DoctorEntity newDoctor) {
+	public DoctorEntity create(CreateDoctorRequest request) {
+		var newDoctor = new DoctorEntity(request.getName(), request.getSpeciality(), request.getZipCode(),
+				request.getAddress(), request.getNumber(), request.getComplement(), request.getCity(), request.getState(), request.getCountry(), request.getRating(), request.getPrice());
 		String addressQuery = newDoctor.getSearchableAddress();
 		var location = nominatimRestClient.searchLocation(addressQuery).stream().findFirst()
 				.orElseThrow(LocationException::new);

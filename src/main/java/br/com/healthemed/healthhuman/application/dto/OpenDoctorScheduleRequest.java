@@ -22,7 +22,7 @@ public class OpenDoctorScheduleRequest implements Serializable {
 	
 	private static final long serialVersionUID = -621830335594903665L;
 	
-	private Long doctorId;
+	private String doctorId;
 	
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)

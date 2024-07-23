@@ -2,7 +2,6 @@ package br.com.healthemed.healthhuman.infra.database.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -74,5 +73,5 @@ public class ScheduleEntity implements Serializable {
 	
 	@Setter
 	@Column(name = "PATIENT_ID", columnDefinition = "varchar(100)")
-	private UUID patientId;
+	private String patientId;
 }
