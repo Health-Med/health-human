@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/query/doctors")
+@RequestMapping("/api/doctors")
 @RequiredArgsConstructor
 public class DoctorController {
 
@@ -39,7 +39,7 @@ public class DoctorController {
 	    content = { @Content(mediaType = "application/json", 
 	      schema = @Schema(allOf = ResponseQueryPage.class)) })
 	})
-	@GetMapping
+	@GetMapping("/query")
 	@Operation(summary = "Query dos doutores")
 	public ResponseQueryPage getAll(
 			@Parameter(description = "Página a ser buscada", example = "1")
