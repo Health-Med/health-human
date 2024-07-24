@@ -10,6 +10,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,12 +25,16 @@ public class UpdateDoctorScheduleRequest implements Serializable {
 	
 	private static final long serialVersionUID = -621830335594903665L;
 	
+	@NotNull
+	@Nonnull
 	private Long id;
 	
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime dateTime;
 	
+	@NotNull
+	@Nonnull
 	private ScheduleStatus status;
 	
 	private String justification;

@@ -2,7 +2,11 @@ package br.com.healthemed.healthhuman.application.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,7 +18,8 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+@JsonInclude(Include.NON_NULL)
 public class CreateDoctorRequest implements Serializable {
 	
 	private static final long serialVersionUID = -621830335594903665L;

@@ -18,6 +18,7 @@ import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
 import br.com.healthemed.healthhuman.domain.exception.CheckoutException;
 import br.com.healthemed.healthhuman.domain.exception.PatientScheduleException;
 import br.com.healthemed.healthhuman.domain.usecase.IMedicalScheduleUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +31,7 @@ public class PatientScheduleController {
 	private final IMedicalScheduleUseCase medicalScheduleUseCase;
 
 	@PostMapping("/checkout")
-	public ScheduleDto checkout(@RequestBody CheckoutScheduleRequest request) {
+	public ScheduleDto checkout(@Valid @RequestBody CheckoutScheduleRequest request) {
 		var patientId = UUID.fromString(request.getPatientId());
 		return Optional.ofNullable(medicalScheduleUseCase.checkout(patientId, request))
 				.map(scheduleMapper::toScheduleDto)
@@ -38,7 +39,7 @@ public class PatientScheduleController {
 	}
 	
 	@PutMapping("/patient/{status}")
-	public ScheduleDto update(@PathVariable ScheduleStatus status, @RequestBody AllowOrRejectDoctorScheduleRequest request) {
+	public ScheduleDto update(@PathVariable ScheduleStatus status, @Valid @RequestBody AllowOrRejectDoctorScheduleRequest request) {
 		return Optional.ofNullable(medicalScheduleUseCase.updatePatientSchedule(request.getPatientId(), request))
 				.map(scheduleMapper::toScheduleDto)
 				.orElseThrow(PatientScheduleException::new);

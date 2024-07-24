@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -120,7 +121,7 @@ public class DoctorController {
 	
 	@PostMapping
 	@Operation(summary = "Criação de doutor")
-	public DoctorDto create(@RequestBody CreateDoctorRequest request) {
+	public DoctorDto create(@Valid @RequestBody CreateDoctorRequest request) {
 		return Optional.ofNullable(userAdapter.create(request))
 				.map(mapper::toDto)
 				.orElseThrow(() -> new RuntimeException("Ocorreu uma falha xpto"));

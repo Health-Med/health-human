@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -88,7 +89,7 @@ public class ScheduleController {
 	      schema = @Schema(allOf = ScheduleDto.class)) })
 	})
 	@PostMapping("/{doctorId}")
-	public ScheduleDto openDoctorSchedule(@PathVariable String doctorId, @RequestBody OpenDoctorScheduleRequest request) {
+	public ScheduleDto openDoctorSchedule(@PathVariable String doctorId, @Valid @RequestBody OpenDoctorScheduleRequest request) {
 		var schedule = medicalScheduleUseCase.openDoctorSchedule(doctorId, request);
 		return scheduleMapper.toScheduleDto(schedule);
 	}
@@ -99,7 +100,7 @@ public class ScheduleController {
 	      schema = @Schema(allOf = ScheduleDto.class)) })
 	})
 	@PutMapping("/{doctorId}")
-	public ScheduleDto updateSchedule(@PathVariable String doctorId, @RequestBody UpdateDoctorScheduleRequest request) {
+	public ScheduleDto updateSchedule(@PathVariable String doctorId, @Valid @RequestBody UpdateDoctorScheduleRequest request) {
 		return Optional.ofNullable(medicalScheduleUseCase.updateDoctorSchedule(doctorId, request))
 				.map(scheduleMapper::toScheduleDto)
 				.orElseThrow(ScheduleNotFoundException::new);
