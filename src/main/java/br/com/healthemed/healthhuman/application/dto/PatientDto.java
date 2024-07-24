@@ -20,23 +20,9 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(Include.NON_NULL)
-public class DoctorDto extends UserDto {
+public class PatientDto extends UserDto {
 	
-	private String speciality;
+	private String email;
 	
-	private String zipCode;
-	
-	private String address;
-	
-	private String complement;
-	
-	private Integer rating;
-	
-	private Double price;
-	
-	private Double latitude;
-	
-	private Double longitude;	
-	
-	private Double distanceInKm;
+	private String cpf;
 }

@@ -1,0 +1,21 @@
+CREATE TABLE TB_USER (
+    dtype varchar(31) not null,
+    id varchar(100) not null,
+    name varchar(250),
+    user_type enum ('DOCTOR','PATIENT'),
+    address varchar(255),
+    address_city varchar(255),
+    address_complement varchar(255),
+    address_country varchar(255),
+    latitude float(53),
+    longitude float(53),
+    address_number integer,
+    price float(53),
+    rating integer,
+    speciality varchar(100),
+    address_state varchar(255),
+    zip_code varchar(10),
+    cpf varchar(255),
+    email varchar(100),
+    primary key (id)
+) ENGINE=INNODB;

@@ -13,8 +13,8 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, String>{
 
 	Page<DoctorEntity> findAll(Pageable pageable);
 	
-	@Query(value = "SELECT * FROM TB_DOCTOR WHERE UPPER(SPECIALITY) LIKE ?1",
-			countQuery = "SELECT count(*) FROM TB_DOCTOR WHERE UPPER(SPECIALITY) LIKE ?1",
+	@Query(value = "SELECT * FROM TB_USER WHERE USER_TYPE = 'DOCTOR' AND UPPER(SPECIALITY) LIKE ?1",
+			countQuery = "SELECT count(*) FROM TB_USER WHERE UPPER(SPECIALITY) LIKE ?1",
 			nativeQuery = true)
 	Page<DoctorEntity> findBySpecialityContaining(String speciality, Pageable pageable);
 	

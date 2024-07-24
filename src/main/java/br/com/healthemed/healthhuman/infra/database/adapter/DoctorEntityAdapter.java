@@ -11,6 +11,7 @@ import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
 import br.com.healthemed.healthhuman.infra.adapter.NominatimRestClient;
 import br.com.healthemed.healthhuman.infra.database.DoctorRepository;
 import br.com.healthemed.healthhuman.infra.database.entity.DoctorEntity;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -30,15 +31,26 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 
 	@Override
 	public DoctorEntity create(CreateDoctorRequest request) {
-		var newDoctor = new DoctorEntity(request.getName(), request.getSpeciality(), request.getZipCode(),
-				request.getAddress(), request.getNumber(), request.getComplement(), request.getCity(), request.getState(), request.getCountry(), request.getRating(), request.getPrice());
+		var newDoctor = DoctorEntity.builder()
+			.type(UserType.DOCTOR)
+			.name(request.getName())
+			.speciality(request.getSpeciality())
+			.zipCode(request.getZipCode())
+			.address(request.getAddress())
+			.number(request.getNumber())
+			.complement(request.getComplement())
+			.city(request.getCity())
+			.state(request.getState())
+			.country(request.getCountry())
+			.rating(request.getRating())
+			.price(request.getPrice())
+			.build();
 		String addressQuery = newDoctor.getSearchableAddress();
 		var location = nominatimRestClient.searchLocation(addressQuery).stream().findFirst()
 				.orElseThrow(LocationException::new);
 		newDoctor.setLatitude(location.getLat());
 		newDoctor.setLongitude(location.getLon());
-		var saved = repository.save(newDoctor);
-		return saved;
+		return repository.save(newDoctor);
 	}
 
 	@Override

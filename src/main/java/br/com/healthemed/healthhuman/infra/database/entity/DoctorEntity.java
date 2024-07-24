@@ -1,46 +1,27 @@
 package br.com.healthemed.healthhuman.infra.database.entity;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
+@Data
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Table(schema = "healthemed", name = "TB_DOCTOR")
-@Builder
-public class DoctorEntity implements Serializable {
+@SuperBuilder
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class DoctorEntity extends UserEntity {
 	
 	private static final long serialVersionUID = 4781858089323528412L;
-
-	@Id
-	@Setter
-    @GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "ID", columnDefinition = "varchar(100)")
-    private String id;
-	
-	@NonNull
-	@NotNull
-	@Column(name = "NAME", columnDefinition = "varchar(250)")
-	private String name;
 	
 	@NonNull
 	@NotNull
@@ -50,7 +31,7 @@ public class DoctorEntity implements Serializable {
 	@NonNull
 	@NotNull
 	@Column(name = "ZIP_CODE")
-	private Long zipCode;
+	private String zipCode;
 	
 	@NonNull
 	@NotNull

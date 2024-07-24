@@ -27,7 +27,8 @@ services:
   application:
     build:
       context: .
-      dockerfile: Dockerfile.local
+      # dockerfile: Dockerfile.local
+      dockerfile: Dockerfile
     image: healthhuman:latest
     container_name: healthhuman
     ports:

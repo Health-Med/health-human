@@ -4,15 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class DoctorNotFoundException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = -4039534595214046018L;
 	
-	public DoctorNotFoundException() {
-		super();
+	public UserNotFoundException() {
+		super("User not found");
 	}
 	
-	public DoctorNotFoundException(String reason) {
+	public UserNotFoundException(String reason) {
 		super(reason);
 	}
 

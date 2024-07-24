@@ -10,7 +10,7 @@ import br.com.healthemed.healthhuman.application.dto.CheckoutScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
-import br.com.healthemed.healthhuman.domain.exception.DoctorNotFoundException;
+import br.com.healthemed.healthhuman.domain.exception.UserNotFoundException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleNotFoundException;
 import br.com.healthemed.healthhuman.domain.exception.StatusNotFoundException;
@@ -29,12 +29,12 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 	
 	private final ScheduleRepository scheduleRepository;
 	
-	private final DoctorRepository doctorRepository;
+	private final DoctorRepository userRepository;
 
 	@Override
 	public ScheduleEntity openDoctorSchedule(String doctorId, OpenDoctorScheduleRequest request) {
 		
-		var doctor = doctorRepository.findById(doctorId).orElseThrow(DoctorNotFoundException::new);
+		var doctor = userRepository.findById(doctorId).orElseThrow(UserNotFoundException::new);
 		
 		if (scheduleAdapter.getByDoctorAndDateTime(doctor.getId(), request.getDateTime()) != null) {
 			throw new ScheduleException("A agenda já se encontra fechada para esta data/hora.");
@@ -45,7 +45,7 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 
 	@Override
 	public ScheduleEntity updateDoctorSchedule(String doctorId, UpdateDoctorScheduleRequest request) {
-		var doctor = doctorRepository.findById(doctorId).orElseThrow(DoctorNotFoundException::new);
+		var doctor = userRepository.findById(doctorId).orElseThrow(UserNotFoundException::new);
 		
 		var schedule = scheduleAdapter.getById(request.getId())
 				.orElseThrow(() -> new ScheduleNotFoundException("Agenda não encontrada"));

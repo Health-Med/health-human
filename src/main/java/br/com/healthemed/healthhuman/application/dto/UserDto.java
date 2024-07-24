@@ -5,38 +5,28 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-@Data
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @SuperBuilder
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 @JsonInclude(Include.NON_NULL)
-public class DoctorDto extends UserDto {
+public abstract class UserDto {
+
+	private String id;
 	
-	private String speciality;
+	private String name;
 	
-	private String zipCode;
-	
-	private String address;
-	
-	private String complement;
-	
-	private Integer rating;
-	
-	private Double price;
-	
-	private Double latitude;
-	
-	private Double longitude;	
-	
-	private Double distanceInKm;
+	private UserType type;
 }
