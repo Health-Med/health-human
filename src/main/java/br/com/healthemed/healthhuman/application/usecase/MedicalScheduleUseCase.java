@@ -1,8 +1,10 @@
 package br.com.healthemed.healthhuman.application.usecase;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.healthemed.healthhuman.application.dto.AllowOrRejectDoctorScheduleRequest;
@@ -24,6 +26,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
+	
+	@Value("${max.query.duration:50}")
+	private Long maxQueryDuration;
 
 	private final ScheduleEntityAdapter scheduleAdapter;
 	
@@ -36,11 +41,14 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 		
 		var doctor = userRepository.findById(doctorId).orElseThrow(UserNotFoundException::new);
 		
-		if (scheduleAdapter.getByDoctorAndDateTime(doctor.getId(), request.getDateTime()) != null) {
+		var begin = request.getDateTime();
+		
+		var endDateTime = begin.plusMinutes(Duration.ofMinutes(this.maxQueryDuration).toMinutes()).minusSeconds(1L);
+		if (!scheduleAdapter.getByDoctorAndDateTimeBetween(doctor.getId(), begin, endDateTime).isEmpty()) {
 			throw new ScheduleException("A agenda já se encontra fechada para esta data/hora.");
 		}
 
-		return scheduleAdapter.save(doctorId, request.getDateTime(), ScheduleStatus.OPENED);
+		return scheduleAdapter.save(doctorId, begin, endDateTime, ScheduleStatus.OPENED);
 	}
 
 	@Override

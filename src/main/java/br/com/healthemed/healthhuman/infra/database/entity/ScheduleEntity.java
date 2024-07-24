@@ -64,6 +64,12 @@ public class ScheduleEntity implements Serializable {
 	@Setter
 	@NonNull
 	@NotNull
+	@Column(name = "SCHEDULE_DATE_END")
+	private LocalDateTime scheduleEnd;
+	
+	@Setter
+	@NonNull
+	@NotNull
 	@Column(name = "SCHEDULE_STATUS")
 	private ScheduleStatus status;
 	

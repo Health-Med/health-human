@@ -19,12 +19,12 @@ public class ScheduleMapper {
 
 	public ScheduleDto toScheduleDto(ScheduleEntity schedule) {
 		var patientId = Optional.ofNullable(schedule.getPatientId()).map(p -> UUID.fromString(p)).orElse(null);
-		return new ScheduleDto(schedule.getId(), schedule.getDoctorId(), schedule.getCreatedTime(), schedule.getUpdatedTime(), 
-				schedule.getSchedule(), schedule.getStatus(), schedule.getJustification(), patientId);
+		return new ScheduleDto(schedule.getId(), schedule.getDoctorId(), schedule.getSchedule(), schedule.getScheduleEnd(), 
+				schedule.getCreatedTime(), schedule.getUpdatedTime(), schedule.getStatus(), schedule.getJustification(), patientId);
 	}
 	
 	public ScheduleEntity toScheduleEntity(ScheduleDto dto) {
-		return new ScheduleEntity(dto.getId(), dto.getDoctorId(), dto.getCreationDateTime(), dto.getUpdateDateTime(), dto.getSchedule(), 
-				dto.getStatus(), dto.getJustification(), dto.getPatientId().toString());
+		return new ScheduleEntity(dto.getId(), dto.getDoctorId(), dto.getScheduleStart(), dto.getScheduleEnd(), 
+				dto.getCreationDateTime(), dto.getUpdateDateTime(), dto.getStatus(), dto.getJustification(), dto.getPatientId().toString());
 	}
 }

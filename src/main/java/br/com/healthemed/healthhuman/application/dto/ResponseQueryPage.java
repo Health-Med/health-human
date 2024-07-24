@@ -25,7 +25,7 @@ import lombok.ToString;
 @JsonInclude(Include.NON_NULL)
 public class ResponseQueryPage {
 
-	List<? extends UserDto> doctors;
+	List<? extends UserDto> users;
 	
 	int page;
 	

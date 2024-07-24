@@ -24,10 +24,11 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long> 
 	List<ScheduleEntity> findAllByDoctorIdAndDate(String doctorId, LocalDate date);
 	
 	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND SCHEDULE_DATE = ?2", nativeQuery = true)
-	ScheduleEntity findByDoctorIdAndDate(String doctorId, LocalDateTime dateTime);
+	List<ScheduleEntity> findByDoctorIdAndDate(String doctorId, LocalDateTime dateTime);
 	
-	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND SCHEDULE_DATE BETWEEN ?2 AND ?3", nativeQuery = true)
-	ScheduleEntity findByDoctorIdAndDateBetween(String doctorId, LocalDateTime start, LocalDateTime end);
+//	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND SCHEDULE_DATE BETWEEN ?2 AND ?3", nativeQuery = true)
+	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND SCHEDULE_DATE BETWEEN ?2 AND ?3 OR SCHEDULE_DATE_END BETWEEN ?2 AND ?3", nativeQuery = true)
+	List<ScheduleEntity> findByDoctorIdAndDateBetween(String doctorId, LocalDateTime start, LocalDateTime end);
 	
 	@Query(value = "SELECT * FROM TB_SCHEDULE WHERE DOCTOR_ID = ?1 AND YEAR(SCHEDULE_DATE) = ?2 AND MONTH(SCHEDULE_DATE) = ?3", nativeQuery = true)
 	List<ScheduleEntity> findAllByDoctorIdAndYearAndMonth(String doctorId, Integer year, Integer month);

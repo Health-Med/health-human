@@ -37,13 +37,11 @@ public class ScheduleEntityAdapter implements IScheduleEntityAdapter {
 	}
 	
 	@Override
-	public ScheduleEntity getByDoctorAndDateTime(String doctorId, LocalDateTime dateTime) {
-		return repository.findByDoctorIdAndDate(doctorId, dateTime.withMinute(00).withSecond(00).withNano(0)); // FIXME: corrigir uso de minuto
-	}
-	
-	@Override
-	public ScheduleEntity getByDoctorAndDateTimeBetween(String doctorId, LocalDateTime start, LocalDateTime end) {
-		return repository.findByDoctorIdAndDateBetween(doctorId, start, end);
+	public List<ScheduleEntity> getByDoctorAndDateTimeBetween(String doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		var start = startDateTime.withSecond(00).withNano(0);
+		var end = endDateTime.withSecond(00).withNano(0);
+		var agenda = repository.findByDoctorIdAndDateBetween(doctorId, start, end);
+		return agenda;
 	}
 
 	@Override
@@ -64,8 +62,8 @@ public class ScheduleEntityAdapter implements IScheduleEntityAdapter {
 	}
 
 	@Override
-	public ScheduleEntity save(String doctorId, LocalDateTime dateTime, ScheduleStatus status) {
-		return save(new ScheduleEntity(doctorId, dateTime, status));
+	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status) {
+		return save(new ScheduleEntity(doctorId, startTime, endTime, status));
 	}
 
 	@Override

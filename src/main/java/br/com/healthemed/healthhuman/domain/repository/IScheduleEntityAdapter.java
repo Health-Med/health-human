@@ -15,9 +15,7 @@ public interface IScheduleEntityAdapter {
 	
 	List<ScheduleEntity> getAllByDoctorAndYearAndMonthAndDay(String doctorId, Integer year, Integer month, Integer day);
 	
-	ScheduleEntity getByDoctorAndDateTime(String doctorId, LocalDateTime dateTime);
-	
-	ScheduleEntity getByDoctorAndDateTimeBetween(String doctorId, LocalDateTime start, LocalDateTime end);
+	List<ScheduleEntity> getByDoctorAndDateTimeBetween(String doctorId, LocalDateTime start, LocalDateTime end);
 	
 	Optional<ScheduleEntity> getById(Long id);
 	
@@ -25,7 +23,7 @@ public interface IScheduleEntityAdapter {
 	
 	void deleteById(String orderId);
 	
-	ScheduleEntity save(String doctorId, LocalDateTime dateTime, ScheduleStatus status);
+	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status);
 	
 	ScheduleEntity save(ScheduleEntity entity);
 }

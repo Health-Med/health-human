@@ -36,13 +36,16 @@ public class ScheduleDto {
 	private String doctorId;
 	
 	@JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN, shape = Shape.STRING)
+	private LocalDateTime scheduleStart;
+	
+	@JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN, shape = Shape.STRING)
+	private LocalDateTime scheduleEnd;
+	
+	@JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN, shape = Shape.STRING)
 	private LocalDateTime creationDateTime;
 	
 	@JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN, shape = Shape.STRING)
 	private LocalDateTime updateDateTime;
-	
-	@JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN, shape = Shape.STRING)
-	private LocalDateTime schedule;
 	
 	private ScheduleStatus status;
 	

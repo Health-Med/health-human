@@ -78,7 +78,7 @@ public class ScheduleController {
 				.withNano(0);
 		var end = start
 				.withMinute(59);
-		return Optional.ofNullable(scheduleEntityAdapter.getByDoctorAndDateTimeBetween(doctorId, start, end))
+		return scheduleEntityAdapter.getByDoctorAndDateTimeBetween(doctorId, start, end).stream().findFirst()
 				.map(scheduleMapper::toScheduleDto)
 				.orElseThrow(ScheduleNotFoundException::new);
 	}
