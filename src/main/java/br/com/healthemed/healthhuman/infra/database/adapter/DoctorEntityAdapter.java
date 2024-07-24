@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.healthemed.healthhuman.application.dto.CreateDoctorRequest;
 import br.com.healthemed.healthhuman.domain.exception.LocationException;
+import br.com.healthemed.healthhuman.domain.exception.UserAlreadyExistantException;
 import br.com.healthemed.healthhuman.domain.repository.IDoctorEntityAdapter;
 import br.com.healthemed.healthhuman.infra.adapter.NominatimRestClient;
 import br.com.healthemed.healthhuman.infra.database.DoctorRepository;
@@ -31,6 +32,10 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 
 	@Override
 	public DoctorEntity create(CreateDoctorRequest request) {
+		repository.findFirstByCrm(request.getCrm()).ifPresent(doctor -> {
+			throw new UserAlreadyExistantException(doctor.getId());
+		});;
+		
 		var newDoctor = DoctorEntity.builder()
 				.type(UserType.DOCTOR)
 				.crm(request.getCrm())
@@ -46,6 +51,7 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 				.rating(request.getRating())
 				.price(request.getPrice())
 				.build();
+		
 		String addressQuery = newDoctor.getSearchableAddress();
 		var location = nominatimRestClient.searchLocation(addressQuery).stream().findFirst()
 				.orElseThrow(LocationException::new);
