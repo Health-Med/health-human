@@ -18,8 +18,6 @@ public class AllowOrRejectDoctorScheduleRequest implements Serializable {
 	
 	private static final long serialVersionUID = -621830335594903665L;
 	
-	private Long id;
-	
 	private String patientId;
 	
 	private ScheduleStatus status;
