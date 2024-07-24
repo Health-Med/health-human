@@ -12,15 +12,16 @@ import br.com.healthemed.healthhuman.application.dto.CheckoutScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.OpenDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.application.dto.UpdateDoctorScheduleRequest;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
-import br.com.healthemed.healthhuman.domain.exception.UserNotFoundException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleException;
 import br.com.healthemed.healthhuman.domain.exception.ScheduleNotFoundException;
 import br.com.healthemed.healthhuman.domain.exception.StatusNotFoundException;
+import br.com.healthemed.healthhuman.domain.exception.UserNotFoundException;
 import br.com.healthemed.healthhuman.domain.usecase.IMedicalScheduleUseCase;
 import br.com.healthemed.healthhuman.infra.database.DoctorRepository;
 import br.com.healthemed.healthhuman.infra.database.ScheduleRepository;
 import br.com.healthemed.healthhuman.infra.database.adapter.ScheduleEntityAdapter;
 import br.com.healthemed.healthhuman.infra.database.entity.ScheduleEntity;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -48,9 +49,12 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 			throw new ScheduleException("A agenda já se encontra fechada para esta data/hora.");
 		}
 
-		return scheduleAdapter.save(doctorId, begin, endDateTime, ScheduleStatus.OPENED);
+		return scheduleAdapter.save(doctorId, begin, endDateTime, ScheduleStatus.OPENED, UserType.DOCTOR);
 	}
 
+	/**
+	 * Dr confirma/rejeita agendamento do paciente
+	 */
 	@Override
 	public ScheduleEntity updateDoctorSchedule(String doctorId, UpdateDoctorScheduleRequest request) {
 		var doctor = userRepository.findById(doctorId).orElseThrow(UserNotFoundException::new);
@@ -87,6 +91,7 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 				schedule.setStatus(request.getStatus());
 				schedule.setJustification(Optional.ofNullable(request.getJustification())
 						.orElseThrow(() -> new ScheduleNotFoundException("Justificativa necessária para rejeitar consulta")));
+				schedule.setStatusBy(UserType.DOCTOR);
 				break;
 			default:
 				throw new ScheduleNotFoundException("Outros status são desconhedidos ao atualizar consulta aceita.");
@@ -101,11 +106,13 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 			case OPENED: // e agenda está sendo reaberta
 				schedule.setStatus(request.getStatus());
 				schedule.setJustification(null);
+				schedule.setStatusBy(UserType.DOCTOR);
 				break;
 			case ACCEPTED:
 				// Cliente precisa setar uma consulta para ser aceita
 				schedule.setStatus(request.getStatus());
 				schedule.setJustification(null);
+				schedule.setStatusBy(UserType.DOCTOR);
 				break;
 			default:
 				throw new ScheduleNotFoundException("Outros status são desconhedidos ao atualizar consulta rejeitada.");
@@ -133,25 +140,22 @@ public class MedicalScheduleUseCase implements IMedicalScheduleUseCase {
 		return scheduleAdapter.save(schedule);
 	}
 	
+	/**
+	 * Paciente rejeita a consulta
+	 */
 	@Override
 	public ScheduleEntity updatePatientSchedule(String patientId, AllowOrRejectDoctorScheduleRequest request) {
 		var schedule = scheduleRepository.findAllByPatientId(patientId).stream().findFirst()
 			.orElseThrow(ScheduleNotFoundException::new);
 		
-		switch(request.getStatus()) {
-		case ACCEPTED:
-			schedule.setStatus(request.getStatus());
-			schedule.setJustification(null);			
-			break;
-		case REJECTED:
+		if (ScheduleStatus.REJECTED.equals(request.getStatus())) {
 			schedule.setStatus(request.getStatus());
 			schedule.setJustification(Optional.ofNullable(request.getJustification())
 					.orElseThrow(() -> new ScheduleException("Justificativa necessária para rejeitar uma agenda")));
-			break;
-		default:
-			throw new StatusNotFoundException();
-		}
-		return scheduleRepository.save(schedule);
+			schedule.setStatusBy(UserType.PATIENT);
+			return scheduleRepository.save(schedule);
+		} 
+		throw new StatusNotFoundException();
 	}
 
 }

@@ -11,6 +11,7 @@ import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
 import br.com.healthemed.healthhuman.domain.repository.IScheduleEntityAdapter;
 import br.com.healthemed.healthhuman.infra.database.ScheduleRepository;
 import br.com.healthemed.healthhuman.infra.database.entity.ScheduleEntity;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -62,8 +63,8 @@ public class ScheduleEntityAdapter implements IScheduleEntityAdapter {
 	}
 
 	@Override
-	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status) {
-		return save(new ScheduleEntity(doctorId, startTime, endTime, status));
+	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status, UserType statusBy) {
+		return save(new ScheduleEntity(doctorId, startTime, endTime, status, statusBy));
 	}
 
 	@Override

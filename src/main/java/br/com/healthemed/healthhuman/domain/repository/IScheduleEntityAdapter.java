@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
 import br.com.healthemed.healthhuman.infra.database.entity.ScheduleEntity;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
 
 public interface IScheduleEntityAdapter {
 	
@@ -23,7 +24,7 @@ public interface IScheduleEntityAdapter {
 	
 	void deleteById(String orderId);
 	
-	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status);
+	public ScheduleEntity save(String doctorId, LocalDateTime startTime, LocalDateTime endTime, ScheduleStatus status, UserType statusBy);
 	
 	ScheduleEntity save(ScheduleEntity entity);
 }

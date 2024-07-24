@@ -9,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -72,6 +74,13 @@ public class ScheduleEntity implements Serializable {
 	@NotNull
 	@Column(name = "SCHEDULE_STATUS")
 	private ScheduleStatus status;
+	
+	@Setter
+	@NonNull
+	@NotNull
+	@Column(name = "STATUS_BY")
+	@Enumerated(EnumType.STRING)
+	private UserType statusBy;
 	
 	@Setter
 	@Column(name = "CANCEL_JUSTIFICATION")

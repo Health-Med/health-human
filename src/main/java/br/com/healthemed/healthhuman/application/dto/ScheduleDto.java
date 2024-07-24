@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.com.healthemed.healthhuman.domain.entity.ScheduleStatus;
+import br.com.healthemed.healthhuman.infra.database.entity.UserType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,8 @@ public class ScheduleDto {
 	private LocalDateTime updateDateTime;
 	
 	private ScheduleStatus status;
+	
+	private UserType statusBy;
 	
 	private String justification;
 	
