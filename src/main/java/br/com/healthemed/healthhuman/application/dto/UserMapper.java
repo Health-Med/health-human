@@ -14,6 +14,7 @@ public class UserMapper {
 		return DoctorDto.builder()
 			.id(entity.getId())
 			.name(entity.getName())
+			.crm(entity.getCrm())
 			.speciality(entity.getSpeciality())
 			.zipCode(entity.getZipCode())
 			.address(entity.getFullAddress())

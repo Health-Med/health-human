@@ -22,6 +22,8 @@ import lombok.experimental.SuperBuilder;
 @JsonInclude(Include.NON_NULL)
 public class DoctorDto extends UserDto {
 	
+	private String crm;
+	
 	private String speciality;
 	
 	private String zipCode;

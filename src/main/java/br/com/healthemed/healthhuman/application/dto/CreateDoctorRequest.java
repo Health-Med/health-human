@@ -27,6 +27,10 @@ public class CreateDoctorRequest implements Serializable {
 	
 	@NonNull
 	@NotNull
+	public String crm;
+	
+	@NonNull
+	@NotNull
 	public String speciality;
 	
 	@NonNull

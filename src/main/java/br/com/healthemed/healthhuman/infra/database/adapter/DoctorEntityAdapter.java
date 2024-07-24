@@ -32,19 +32,20 @@ public class DoctorEntityAdapter implements IDoctorEntityAdapter {
 	@Override
 	public DoctorEntity create(CreateDoctorRequest request) {
 		var newDoctor = DoctorEntity.builder()
-			.type(UserType.DOCTOR)
-			.name(request.getName())
-			.speciality(request.getSpeciality())
-			.zipCode(request.getZipCode())
-			.address(request.getAddress())
-			.number(request.getNumber())
-			.complement(request.getComplement())
-			.city(request.getCity())
-			.state(request.getState())
-			.country(request.getCountry())
-			.rating(request.getRating())
-			.price(request.getPrice())
-			.build();
+				.type(UserType.DOCTOR)
+				.crm(request.getCrm())
+				.name(request.getName())
+				.speciality(request.getSpeciality())
+				.zipCode(request.getZipCode())
+				.address(request.getAddress())
+				.number(request.getNumber())
+				.complement(request.getComplement())
+				.city(request.getCity())
+				.state(request.getState())
+				.country(request.getCountry())
+				.rating(request.getRating())
+				.price(request.getPrice())
+				.build();
 		String addressQuery = newDoctor.getSearchableAddress();
 		var location = nominatimRestClient.searchLocation(addressQuery).stream().findFirst()
 				.orElseThrow(LocationException::new);

@@ -25,6 +25,11 @@ public class DoctorEntity extends UserEntity {
 	
 	@NonNull
 	@NotNull
+	@Column(name = "CRM", columnDefinition = "varchar(15)")
+	private String crm;
+	
+	@NonNull
+	@NotNull
 	@Column(name = "SPECIALITY", columnDefinition = "varchar(100)")
 	private String speciality;
 	
